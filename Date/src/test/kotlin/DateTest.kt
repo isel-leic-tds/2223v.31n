@@ -55,4 +55,24 @@ class DateTest {
         val d2 = Date(2023,3,2)
         assertEquals(d1.hashCode(),d2.hashCode())
     }
+    @Test
+    fun `Create invalid Dates`() {
+        assertFailsWith<IllegalArgumentException> { Date(2023, 0, 2) }
+        assertFailsWith<IllegalArgumentException> { Date(2023, 13, 2) }
+        assertFailsWith<IllegalArgumentException> { Date(2023, 3, 0) }
+        assertFailsWith<IllegalArgumentException> { Date(2023, 3, 32) }
+        assertFailsWith<IllegalArgumentException> { Date(2023, 2, 29) }
+    }
+    @Test
+    fun `Add days to a Date`() {
+        val d1 = Date(2023,3,2)
+        val d2 = d1.addDays(3)
+        assertEquals("2023-3-5",d2.toString())
+        val d3 = Date(2023,3,31).addDays(1)
+        assertEquals("2023-4-1",d3.toString())
+        val d4 = Date(2023,12,31).addDays(1)
+        assertEquals("2024-1-1",d4.toString())
+        val d5 = d1.addDays(400000)
+        assertEquals("3118-5-1",d5.toString())
+    }
 }
