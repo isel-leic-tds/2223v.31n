@@ -41,15 +41,23 @@ class MutableStack2<T> {
 class MutableStack<T> {
     private class Node<U>(val elem: U, val next: Node<U>?)
     private var head: Node<T>? = null
+    private val headNotNull get() = head ?: throw NoSuchElementException("Empty stack")
 
     fun push(elem: T) { head = Node(elem, head) }
-    fun top(): T = head?.elem ?: throw NoSuchElementException("Empty stack")
-    fun pop(): T {
-        val elem = top()
-        head = head?.next
-        return elem
-    }
+    fun top(): T = headNotNull.elem
+    fun pop(): T = headNotNull.also{ head=it.next }.elem
     fun isEmpty() = head == null
+    override fun equals(other: Any?): Boolean {
+        if (other !is MutableStack<*>) return false
+        var n1 = head
+        var n2 = other.head
+        while (n1!=null && n2!=null) {
+            if (n1.elem != n2.elem) return false
+            n1 = n1.next
+            n2 = n2.next
+        }
+        return n2==null && n1==null
+    }
 }
 
 
