@@ -1,7 +1,7 @@
 package isel.tds
 
 /**
- * Code snippet to use a generic MutableStack.
+ * Code snippet to use a generic MutableStack and Stack.
  */
 fun main() {
     val x: Any = MutableStack<String>()
@@ -16,19 +16,11 @@ fun main() {
         val elem = ms.pop()
         println(elem)
     }
-
-
-    var s = Stack<String>()
-    s = s.push("ISEL").push("LEIC").push("TDS")
+    var s = stackOf("ISEL","LEIC","TDS")
     println(s.top())
     while (! s.isEmpty()) {
         val elem = s.top()
         s = s.pop()
-        //val (elem,stk) = s.pop2()
-        //val pair = s.pop2()
-        //val stk = pair.component2()
-        //val elem = pair.component1()
-        //s = stk
         println(elem)
     }
 }
