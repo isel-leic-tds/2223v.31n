@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+[*] -> ByPoints
+
+ByPoints --> ByPoints : next
+ByPoints -> Game : next
+ByPoints --> Deuce : next
+Deuce -> Advantage : next
+Advantage -> Game : next
+Advantage -> Deuce : next
+
+Game --> [*]
+
+ByPoints : pointsA
+ByPoints : pointsB
+Advantage : player
+Game : winner
+@enduml

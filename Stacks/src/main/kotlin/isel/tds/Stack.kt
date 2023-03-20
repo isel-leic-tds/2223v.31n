@@ -37,3 +37,18 @@ fun <T> Stack() = StackEmpty as Stack<T>
 fun <T> stackOf(vararg elems: T): Stack<T> =
     if (elems.isEmpty()) Stack()
     else StackNotEmpty( elems.drop(1).fold(Node(elems[0],null)){ n, e -> Node(e,n) } )
+
+/**
+ * Desafio proposto no sumário da aula de 13 Março
+ * Creates an immutable stack with the given [size] and [init]ializer function.
+ */
+fun <T> Stack(size: Int, init: (Int)->T): Stack<T> =
+    if (size == 0) Stack()
+    else {
+        val start = Node(init(size-1), null)
+        StackNotEmpty(
+            (size-2 downTo 0).fold(start){ node, index ->
+                Node(init(index), node)
+            }
+        )
+    }

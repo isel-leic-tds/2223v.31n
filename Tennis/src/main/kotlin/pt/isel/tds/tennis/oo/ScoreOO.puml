@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide empty members
+
+enum Player {
+    + {static} A
+    + {static} B
+}
+
+-enum Points {
+    value: Int
+    {static} LOVE
+    {static} FIFTEEN
+    {static} THIRTY
+    {static} FORTY
+    next(): Points
+}
+
++abstract class Score {
+    placard: String
+    isGame: Boolean = false
+    {abstract} next(): Score
+}
+
+-class ByPoints {
+    placard = "$A - $B"
+    next(): Score
+}
+Score <|-- ByPoints
+Points --* ByPoints : pointsA
+Points --* ByPoints : pointsB
+
+-class Advantage {
+    placard = "Advantage $W"
+    next(): Score
+}
+Score <|-- Advantage
+Player --* Advantage : player
+
+-class Game {
+    placard = "Game $W"
+    next() = throw
+    isGame = true
+}
+Score <|--- Game
+Player --* Game : winner
+
+-class Deuce <<(O,orange)>> {
+    placard = "Deuce"
+    next(): Score
+}
+Score <|--- Deuce
+
+@enduml

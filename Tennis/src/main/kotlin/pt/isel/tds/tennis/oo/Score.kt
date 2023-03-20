@@ -22,6 +22,7 @@ abstract class Score(val placard: String) {
     abstract fun next(winner: Player): Score
 }
 
+// MISU - ByPoints(FORTY,FORTY) is not a valid score
 private class ByPoints(val pointsA: Points, val pointsB: Points): Score(
     "${pointsA.value} - ${pointsB.value}"
 ) {
