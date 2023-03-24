@@ -13,11 +13,11 @@ enum Player {
     {static} LOVE
     {static} FIFTEEN
     {static} THIRTY
-    {static} FORTY
+ '   {static} FORTY
     next(): Points
 }
 
-+abstract class Score {
++abstract class Score <<sealed>>{
     placard: String
     isGame: Boolean = false
     {abstract} next(): Score
@@ -36,7 +36,7 @@ Points --* ByPoints : pointsB
     next(): Score
 }
 Score <|-- Advantage
-Player --* Advantage : player
+Player --o Advantage : player
 
 -class Game {
     placard = "Game $W"
@@ -44,12 +44,19 @@ Player --* Advantage : player
     isGame = true
 }
 Score <|--- Game
-Player --* Game : winner
+Player --o Game : winner
 
 -class Deuce <<(O,orange)>> {
     placard = "Deuce"
     next(): Score
 }
-Score <|--- Deuce
+Score <|- Deuce :"                    "
 
+-class Forty {
+    placard = "$A - 40" | "40 - $B"
+    next(): Score
+}
+Score <|--- Forty
+Player --o Forty : player
+Points --* Forty : pointsOther
 @enduml

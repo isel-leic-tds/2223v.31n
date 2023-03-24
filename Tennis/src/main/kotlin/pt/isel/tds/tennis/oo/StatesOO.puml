@@ -4,8 +4,10 @@
 [*] -> ByPoints
 
 ByPoints --> ByPoints : next
-ByPoints -> Game : next
-ByPoints --> Deuce : next
+ByPoints --> Forty : next
+Forty --> Forty : next
+Forty --> Deuce : next
+Forty --> Game : next
 Deuce -> Advantage : next
 Advantage -> Game : next
 Advantage -> Deuce : next
@@ -16,4 +18,7 @@ ByPoints : pointsA
 ByPoints : pointsB
 Advantage : player
 Game : winner
+Forty : player
+Forty : pointsOther
+
 @enduml

@@ -1,7 +1,8 @@
 package pt.isel.tds.tennis
 //import pt.isel.tds.tennis.first.*
 //import pt.isel.tds.tennis.oo.*
-import pt.isel.tds.tennis.pm.*
+//import pt.isel.tds.tennis.pm.*
+import pt.isel.tds.tennis.fp.*
 
 fun main() {
     var score: Score = InitialScore

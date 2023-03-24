@@ -1,5 +1,5 @@
 import kotlin.test.*
-import pt.isel.tds.tennis.oo.*
+import pt.isel.tds.tennis.fp.*
 import pt.isel.tds.tennis.*
 
 class ScoreTests {
