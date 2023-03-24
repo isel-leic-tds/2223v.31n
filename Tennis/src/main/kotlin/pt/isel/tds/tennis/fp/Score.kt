@@ -8,10 +8,19 @@ private enum class Points(val value: Int) {
 }
 private fun Points.next(): Points = Points.values()[ordinal+1]
 
+/**
+ * This solution uses only one class [Score] to represent all states of the score.
+ * Each instance of [Score] stores the information of the state and the next function (by value).
+ *
+ * The functions [deuce], [advantage], [game], [byPoints] and [forty] are used to create instances of [Score].
+ * @property placard the string representation of the score
+ * @property isGame true if the score is a game (terminal state)
+ * @property next the function that computes the next score state given the winner of the point
+ */
 class Score(
     val placard: String,
     val isGame: Boolean = false,
-    val next: (Player) -> Score
+    val next: (winner: Player) -> Score
 )
 
 private fun deuce() = Score("Deuce", next= ::advantage)

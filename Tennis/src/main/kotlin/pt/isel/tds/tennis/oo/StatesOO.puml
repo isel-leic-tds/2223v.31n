@@ -3,14 +3,14 @@
 
 [*] -> ByPoints
 
-ByPoints --> ByPoints : next
-ByPoints --> Forty : next
-Forty --> Forty : next
-Forty --> Deuce : next
-Forty --> Game : next
+ByPoints --> ByPoints : next\n[else]
+ByPoints --> Forty : next\n[pointsOf(winner)==THIRTY]
+Forty --> Forty : next\n[else]
+Forty --> Deuce : next\n[winner!=player\n&& pointsOf(winner)=THIRTY]
+Forty --> Game : next\n[winner==player]
 Deuce -> Advantage : next
-Advantage -> Game : next
-Advantage -> Deuce : next
+Advantage -> Game : next\n[winner==player]
+Advantage -> Deuce : next\n[else]
 
 Game --> [*]
 

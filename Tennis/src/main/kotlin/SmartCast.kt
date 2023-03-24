@@ -1,6 +1,4 @@
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
-
+import kotlin.contracts.*
 
 sealed class User(val name: String) {
     @OptIn(ExperimentalContracts::class)

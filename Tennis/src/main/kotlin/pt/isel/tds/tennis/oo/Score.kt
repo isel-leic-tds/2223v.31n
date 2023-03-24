@@ -2,13 +2,12 @@ package pt.isel.tds.tennis.oo
 
 import pt.isel.tds.tennis.Player
 
-
 private enum class Points(val value: Int) {
     LOVE(0), FIFTEEN(15), THIRTY(30); // FORTY(40); //, GAME(45);
     fun next(): Points = values()[ordinal+1]
 }
 /**
- *  Alternative implementation using an trivial class with a companion object.
+ *  Alternative implementation of Points using a trivial class with a companion object.
  *
 private class Points private constructor(val value: Int, val ordinal: Int) {
     companion object {
@@ -38,7 +37,7 @@ private class ByPoints(val pointsA: Points, val pointsB: Points): Score(
     "${pointsA.value} - ${pointsB.value}"
 ) {
     private fun pointsOf(player: Player) = if (player==Player.A) pointsA else pointsB
-    override fun next(winner: Player): Score = when {
+    override fun next(winner: Player) = when {
         pointsOf(winner)== Points.THIRTY -> Forty(winner, pointsOf(winner.other()))
         winner==Player.A -> ByPoints( pointsA.next(), pointsB )
         else -> ByPoints( pointsA, pointsB.next())
@@ -48,7 +47,7 @@ private class ByPoints(val pointsA: Points, val pointsB: Points): Score(
 private class Forty(val player: Player, val pointsOther: Points): Score(
     if (player==Player.A) "40 - ${pointsOther.value}" else "${pointsOther.value} - 40"
 ) {
-    override fun next(winner: Player): Score = when {
+    override fun next(winner: Player) = when {
         winner==player -> Game(winner)
         pointsOther==Points.THIRTY -> Deuce
         else -> Forty(player, pointsOther.next())

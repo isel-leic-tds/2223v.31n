@@ -17,7 +17,7 @@ enum class Points(val value: Int) {
  *
  * Deuce -> (FORTY,FORTY); Advantage -> (GAME,FORTY) or (FORTY,GAME).
  *
- * Game -> (GAME,*) or (*,GAME) when the other player has less than FORTY points.
+ * Game -> (GAME,?) or (?,GAME) when the other player has less than FORTY points.
  *
  * This solution is not object-oriented and does not use polymorphism.
  *
