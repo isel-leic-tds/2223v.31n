@@ -1,5 +1,13 @@
 package pt.isel.tds.ttt
 
+import pt.isel.tds.ttt.model.*
+import pt.isel.tds.ttt.ui.*
+
+/**
+ * Main loop for the Tic-Tac-Toe game console application.
+ * It reads commands from the console and executes them.
+ * The only mutable variable is the game state than is updated by the commands.
+ */
 fun main() {
     var game: Game? = null
     val commands = getCommands()
@@ -16,26 +24,3 @@ fun main() {
     println("Bye.")
 }
 
-fun Game.show() { }
-
-fun getCommands() = mapOf<String,Command>(
-    "EXIT" to object : Command() {
-        override fun isToFinish() = true
-    }
-)
-
-abstract class Command {
-    open fun execute(args: List<String>, game: Game?) = game
-    abstract fun isToFinish(): Boolean
-}
-
-class Game()
-
-data class CommandLine(val name: String, val args: List<String>)
-
-tailrec fun readCommand(): CommandLine {
-    print("> ")
-    val line = readln().split(' ').filter { it.isNotBlank() }
-    return if (line.isEmpty()) readCommand()
-    else CommandLine(line.first().uppercase(), line.drop(1))
-}
