@@ -1,8 +1,6 @@
 package pt.isel.tds.ttt.ui
 
-import pt.isel.tds.ttt.model.BOARD_SIZE
-import pt.isel.tds.ttt.model.Game
-import pt.isel.tds.ttt.model.Position
+import pt.isel.tds.ttt.model.*
 
 // Separator line precomputed for efficiency
 private val separator = "---+".repeat(BOARD_SIZE-1)+"---"
@@ -25,5 +23,9 @@ fun Game.show() {
         } else
             print("|")
     }
-    println("turn: ${board.turn}")
+    println( when(board) {
+        is BoardRun -> "turn: ${board.turn}"
+        is BoardWin -> "winner: ${board.winner}"
+        is BoardDraw -> "Draw"
+    } )
 }

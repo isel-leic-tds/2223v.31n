@@ -15,10 +15,14 @@ fun main() {
         val (name, args) = readCommand()
         val cmd = commands[name]
         if (cmd==null) println("Invalid command $name")
-        else {
+        else try {
             game = cmd.execute(args, game)
             if (cmd.isToFinish()) break
             game?.show()
+        } catch (e: Exception) {
+            println(e.message)
+            if (e is IllegalArgumentException)
+                println("Use: $name ${cmd.argsSyntax}")
         }
     }
     println("Bye.")

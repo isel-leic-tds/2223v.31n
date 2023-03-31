@@ -12,7 +12,10 @@ package pt.isel.tds.ttt.model
 value class Position private constructor(val index: Int) {
     val row: Int get() = index / BOARD_SIZE
     val col: Int get() = index % BOARD_SIZE
-    override fun toString() = "($row,$col)"
+    val backSlash get() = row == col            // Is in principal diagonal?
+    val slash get() = row+col == BOARD_SIZE-1   // Is in secondary diagonal?
+
+    override fun toString() = "$index"
     companion object {
         val values = List(MAX_MOVES) { Position(it) }
         /**
@@ -34,3 +37,9 @@ fun Position(row: Int, col: Int) = run {
     require(row in 0 until BOARD_SIZE && col in 0 until BOARD_SIZE)
     Position.values[row * BOARD_SIZE + col]
 }
+
+/**
+ * Creates a [Position] from the given [index] or returns null if the [index] is out of range.
+ */
+fun Int.toPositionOrNull() =
+    if (this in Position.values.indices) Position(this) else null
