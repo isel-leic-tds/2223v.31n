@@ -39,7 +39,10 @@ fun Position(row: Int, col: Int) = run {
 }
 
 /**
- * Creates a [Position] from the given [index] or returns null if the [index] is out of range.
+ * Creates a [Position] from the Int (index) or returns null if the index is out of range.
  */
 fun Int.toPositionOrNull() =
     if (this in Position.values.indices) Position(this) else null
+
+fun Int.toPosition() =
+    checkNotNull(toPositionOrNull())

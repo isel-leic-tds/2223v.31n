@@ -41,6 +41,8 @@ object Play: Command("<position>") {
  * Returns a map of all commands supported by the application.
  */
 fun getCommands() = mapOf(
+    // TODO: Add storage support
+    // TODO: Add commands JOIN and REFRESH
     "PLAY" to Play,
     "NEW" to New,
     "EXIT" to object : Command() {
