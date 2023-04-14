@@ -1,0 +1,43 @@
+@startuml
+
+package tds as "pt.isel.tds" {
+    package storage {
+        [Storage]
+        [TextFileStorage]
+    }
+    package ttt {
+        package model  {
+            [Game]
+            [Board]
+            [Position]
+            [BoardSerializer]
+        }
+        package ui {
+            [Command]
+            [Input]
+            [Output]
+        }
+        [Main]
+    }
+}
+
+Game .right.> Board
+Board ..> Position
+
+Main ..> Command
+Main ..> Input
+Main ..> Output
+Main ..> Game
+Command .> Game
+Output ..> Game
+Output ..> Board
+
+TextFileStorage ..> Storage
+BoardSerializer ..> Storage
+BoardSerializer .right.> Board
+
+Main ..> BoardSerializer
+Main ..> TextFileStorage
+Command ..> Storage
+Game ..> Storage
+@enduml

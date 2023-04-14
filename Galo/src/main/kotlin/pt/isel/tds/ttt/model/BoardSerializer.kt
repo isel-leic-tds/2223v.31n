@@ -20,12 +20,14 @@ object BoardSerializer : Serializer<Board,String> {
         })
     }
     override fun deserialize(stream: String): Board {
-        val lines = stream.split("\n")
-        val (kind,player) = lines[0].split(":")
-        val moves = lines[1].split(" ").associate {
-            val (k,v) = it.split(":")
-            k.toInt().toPosition() to Player.valueOf(v)
-        }
+        val (header, movesLine) = stream.split("\n")
+        val (kind,player) = header.split(":")
+        val moves =
+            if (movesLine.isEmpty()) emptyMap()
+            else movesLine.split(" ").associate {
+                val (k,v) = it.split(":")
+                k.toInt().toPosition() to Player.valueOf(v)
+            }
         return when(kind) {
             "Run" -> BoardRun(moves, Player.valueOf(player))
             "Win" -> BoardWin(moves, Player.valueOf(player))

@@ -1,7 +1,7 @@
 import pt.isel.tds.ttt.model.*
 import kotlin.test.*
 
-class BoardSetrializerTests {
+class BoardSerializerTests {
     @Test fun `Test board serialization`() {
         val sut = createBoard(Player.X).play(5.toPosition()).play(0.toPosition())
         val expected = "Run:X\n5:X 0:O\n"

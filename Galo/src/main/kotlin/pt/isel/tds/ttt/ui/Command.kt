@@ -1,51 +1,44 @@
 package pt.isel.tds.ttt.ui
 
+import pt.isel.tds.storage.Storage
 import pt.isel.tds.ttt.model.*
 
 /**
- * Base class for all commands.
- * The [execute] method is called to execute the command.
- * The [isToFinish] method is called to check if the command is to finish the game.
+ * Represents a command supported by the application.
+ * @param argsSyntax the syntax of the command arguments.
+ * @param isToFinish a function that returns true if the command is to finish the application.
+ * @param execute a function that executes the command.
  */
-abstract class Command(val argsSyntax: String = ""){
-    open fun execute(args: List<String>, game: Game?) = game
-    open fun isToFinish(): Boolean = false
-}
+data class Command(
+    val argsSyntax: String = "",
+    val isToFinish: () -> Boolean = { false },
+    val execute: (List<String>, Game?) -> Game? = { _, g -> g }
+)
 
+typealias BoardStorage = Storage<String, Board>
 /**
- * Command to start a new game.
- * The first player is X for the first game and alternated between games.
+ * Returns a map of all commands supported by the application.
  */
-object New : Command() {
-    override fun execute(args: List<String>, game: Game?) = run {
-        val player = game?.firstPlayer?.other() ?: Player.X
-        Game( createBoard(player), player)
-    }
-}
-
-/**
- * Command to play a move in the game.
- * The position is given as a single integer in the range 0..BOARD_SIZE*BOARD_SIZE-1.
- */
-object Play: Command("<position>") {
-    override fun execute(args: List<String>, game: Game?): Game {
+fun getCommands(st: BoardStorage) = mapOf(
+    "PLAY" to Command("<position>") { args, game ->
         require(args.isNotEmpty()) { "Missing position" }
         val pos = requireNotNull(args.first().toIntOrNull()?.toPositionOrNull())
             {"Invalid position ${args.first()}"}
         checkNotNull(game) { "Game not started" }
-        return game.play(pos)
-    }
-}
-
-/**
- * Returns a map of all commands supported by the application.
- */
-fun getCommands() = mapOf(
-    // TODO: Add storage support
-    // TODO: Add commands JOIN and REFRESH
-    "PLAY" to Play,
-    "NEW" to New,
-    "EXIT" to object : Command() {
-        override fun isToFinish() = true
-    }
+        game.play(pos, st)
+    },
+    "NEW" to Command("<game>"){ args, _ ->
+        require(args.isNotEmpty()) { "Missing game" }
+        createGame(args[0], st)
+    },
+    "JOIN" to Command("<game>"){ args, _ ->
+        require(args.isNotEmpty()) { "Missing game" }
+        joinGame(args[0], st)
+    },
+    "REFRESH" to Command { _, game ->
+        checkNotNull(game) { "Game not started" }
+        game.refresh(st)
+    },
+    "EXIT" to Command(isToFinish = { true })
 )
+

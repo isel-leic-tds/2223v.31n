@@ -1,7 +1,9 @@
 package pt.isel.tds.ttt
 
+import pt.isel.tds.storage.TextFileStorage
 import pt.isel.tds.ttt.model.*
 import pt.isel.tds.ttt.ui.*
+import pt.isel.tds.ttt.ui.getCommands
 
 /**
  * Main loop for the Tic-Tac-Toe game console application.
@@ -10,7 +12,7 @@ import pt.isel.tds.ttt.ui.*
  */
 fun main() {
     var game: Game? = null
-    val commands = getCommands()
+    val commands = getCommands(TextFileStorage("games", BoardSerializer))
     while (true) {
         val (name, args) = readCommand()
         val cmd = commands[name]
@@ -19,10 +21,10 @@ fun main() {
             game = cmd.execute(args, game)
             if (cmd.isToFinish()) break
             game?.show()
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
+            println("${e.message}\nUse: $name ${cmd.argsSyntax}")
+        } catch (e: IllegalStateException) {
             println(e.message)
-            if (e is IllegalArgumentException)
-                println("Use: $name ${cmd.argsSyntax}")
         }
     }
     println("Bye.")

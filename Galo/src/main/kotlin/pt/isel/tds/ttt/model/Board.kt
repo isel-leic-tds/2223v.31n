@@ -19,7 +19,15 @@ typealias Moves = Map<Position,Player>
  * There are three possible states of board: [BoardRun], [BoardWin] and [BoardDraw].
  * These hierarchy is to be used by pattern matching.
  */
-sealed class Board(val moves: Moves)
+sealed class Board(val moves: Moves) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Board) return false
+        if (this::class != other::class) return false
+        return moves.size == other.moves.size
+    }
+    override fun hashCode(): Int = moves.hashCode()
+}
 class BoardRun(moves: Moves, val turn: Player): Board(moves)
 class BoardWin(moves: Moves, val winner: Player): Board(moves)
 class BoardDraw(moves: Moves) : Board(moves)
