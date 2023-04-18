@@ -1,9 +1,14 @@
 @startuml
 
+skinparam backgroundcolor transparent
+
 package tds as "pt.isel.tds" {
     package storage {
         [Storage]
         [TextFileStorage]
+        [MemoryStorage]
+        [MongoStorage]
+        [MongoUtils]
     }
     package ttt {
         package model  {
@@ -21,7 +26,7 @@ package tds as "pt.isel.tds" {
     }
 }
 
-Game .right.> Board
+Game .> Board
 Board ..> Position
 
 Main ..> Command
@@ -32,12 +37,17 @@ Command .> Game
 Output ..> Game
 Output ..> Board
 
-TextFileStorage ..> Storage
+TextFileStorage .> Storage
 BoardSerializer ..> Storage
-BoardSerializer .right.> Board
+BoardSerializer .> Board
 
 Main ..> BoardSerializer
-Main ..> TextFileStorage
+'Main ..> TextFileStorage
+Main ..> MongoStorage
 Command ..> Storage
 Game ..> Storage
+
+MemoryStorage ..> Storage
+MongoStorage ..> Storage
+MongoStorage ..> MongoUtils
 @enduml

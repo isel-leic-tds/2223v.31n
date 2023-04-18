@@ -1,5 +1,7 @@
 package pt.isel.tds.ttt
 
+import pt.isel.tds.storage.MongoDriver
+import pt.isel.tds.storage.MongoStorage
 import pt.isel.tds.storage.TextFileStorage
 import pt.isel.tds.ttt.model.*
 import pt.isel.tds.ttt.ui.*
@@ -12,7 +14,9 @@ import pt.isel.tds.ttt.ui.getCommands
  */
 fun main() {
     var game: Game? = null
-    val commands = getCommands(TextFileStorage("games", BoardSerializer))
+    val driver = MongoDriver()
+    val commands = getCommands(MongoStorage("games", driver, BoardSerializer))
+    //val commands = getCommands(TextFileStorage("games", BoardSerializer))
     while (true) {
         val (name, args) = readCommand()
         val cmd = commands[name]
@@ -28,5 +32,6 @@ fun main() {
         }
     }
     println("Bye.")
+    driver.close()
 }
 

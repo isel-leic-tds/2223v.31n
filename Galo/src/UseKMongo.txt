@@ -1,0 +1,30 @@
+MongoDB Atlas:
+https://www.mongodb.com/atlas/database
+
+- Criar um registo de user novo ou entrar como Google ou GitHub user
+- Questionário
+- Escolher 
+	o plano grátis ( M0 ), 
+	um provider (ex: AWS), 
+	a região do servidor (ex: Europa), 
+	o nome do cluster (ex: Cluster0)
+- Criar um utilizador (Username + password) para ligar ao cluster 
+- Definir o endereço IP de onde se pode ligar
+	Depois, em "Network Access" Acrescentar o IP 0.0.0/0  para aceitar de qualquer local.
+	
+- Aceder à base de dados
+	Criar uma base de dados e uma coleção (dbName, collectionName)
+
+
+Acrescentar às dependencencias do build.gradle.kts:
+	dependencies {
+		...
+		implementation("org.litote.kmongo:kmongo:4.8.0")
+		implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.1")
+    }
+	
+Obter a connection string no MondoDB Atlas e definir uma variável de ambiente:
+	MONGO_CONNECTION=mongodb+srv://<user>:<password>@cluster0.brsewd2.mongodb.net/reversi?retryWrites=true&w=majority
+	
+Usar as funções definidas no módulo MongoUtils.kt e/ou MongoStorage<K,T>
+
