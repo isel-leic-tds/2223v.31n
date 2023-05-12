@@ -3,40 +3,65 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.application
+import androidx.compose.ui.window.*
+import kotlinx.coroutines.delay
 
 @Composable
 @Preview
-fun Counter() {
+fun FrameWindowScope.Counter(onExit: ()->Unit ) {
     var counter by remember { mutableStateOf(0) }
-    Column(modifier = Modifier.fillMaxWidth().padding(5.dp).background(Color.LightGray)) {
-        Text("Counter = $counter", fontSize = 32.sp)
-        incDecButtons{
-            counter += it
+    CounterMenu(onExit, onReset = { counter=0 })
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(5.dp).background(Color.LightGray),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Content(counter) { counter += it }
+        LaunchedEffect(counter){
+            println("Launch $counter")
+            while (true) {
+                delay(1000)
+                counter++
+            }
         }
     }
 }
 
 @Composable
-fun incDecButtons( changeValue: (Int)->Unit ) {
-    Row(modifier = Modifier.fillMaxWidth(0.9f).background(Color.Green), horizontalArrangement = Arrangement.SpaceEvenly) {
-        Button(onClick = { changeValue(+1) }) {
-            Text("Increment")
+fun Content(counter: Int, onChange: (delta: Int)->Unit ) {
+    println("Content")
+    Text("Counter = $counter", fontSize = 32.sp)
+    repeat(5) {
+        print("$it ")
+        IncDecButtons(it + 1, changeValue = onChange)
+    }
+}
+
+@Composable
+fun FrameWindowScope.CounterMenu(onExit: () -> Unit, onReset: ()->Unit) {
+    MenuBar {
+        Menu("Menu") {
+            Item("Exit", onClick = onExit)
+            Item("Reset", onClick = onReset)
         }
-        Button(onClick = { changeValue(-1)}) {
-            Text("Decrement")
+    }
+}
+
+@Composable
+fun IncDecButtons(delta: Int, changeValue: (Int)->Unit ) {
+    Row(modifier = Modifier.fillMaxWidth().background(Color.Green),
+        horizontalArrangement = Arrangement.SpaceEvenly) {
+        Button(onClick = { changeValue(+delta) }) {
+            Text("+$delta")
+        }
+        Button(onClick = { changeValue(-delta)}) {
+            Text("-$delta")
         }
     }
 }
@@ -48,7 +73,7 @@ fun main() {
             onCloseRequest = ::exitApplication,
             state = WindowState(height = Dp.Unspecified, width = 300.dp)
         ) {
-            Counter()
+            Counter(::exitApplication)
         }
     }
     println("End.")

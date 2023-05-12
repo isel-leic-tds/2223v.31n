@@ -15,7 +15,6 @@ data class Command(
     val execute: (List<String>, Game?) -> Game? = { _, g -> g }
 )
 
-typealias BoardStorage = Storage<String, Board>
 /**
  * Returns a map of all commands supported by the application.
  */
