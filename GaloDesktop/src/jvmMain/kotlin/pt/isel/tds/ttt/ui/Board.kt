@@ -5,16 +5,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import pt.isel.tds.ttt.model.*
 
 // Dimensions of the board presentation.
-val cellSize = 80.dp
-val lineSize = 5.dp
+val cellSize = 150.dp
+val lineSize = 10.dp
 val boardSize = cellSize * BOARD_SIZE + lineSize*(BOARD_SIZE -1)
 
 @Composable
@@ -54,18 +56,34 @@ fun CelViewTest() = CellView(Player.X) {}
 /**
  * The Composable function responsible for the presentation of each cell.
  * @param player the player that played on the cell.
+ * @param modifier the modifier to be applied to the cell.
  * @param onClick the function to be called when the cell is clicked.
  */
 @Composable
-fun CellView(player: Player?, onClick: () -> Unit) {
-    val mod = Modifier.size(cellSize).background(Color.LightGray)
+fun CellView(
+    player: Player?,
+    modifier: Modifier = Modifier.size(cellSize).background(Color.LightGray),
+    onClick: () -> Unit = {},
+) {
     if (player==null)
-        Box(modifier = mod.clickable(onClick = onClick))
-    else {
-        val image = when (player) {
-            Player.O -> "circle.png"
-            Player.X -> "cross.png"
+        Box(modifier = modifier.clickable(onClick = onClick))
+    else
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center
+        ){
+            var fill by remember(player) { mutableStateOf(0.1f) }
+            val image = when (player) {
+                Player.O -> "circle.png"
+                Player.X -> "cross.png"
+            }
+            Image(painterResource(image), modifier =Modifier.fillMaxSize(fill), contentDescription = image)
+            LaunchedEffect(player) {
+                while(fill<1f) {
+                    delay(50)
+                    fill *= 2
+                }
+                fill = 1f
+            }
         }
-        Image(painterResource(image), modifier =mod, contentDescription = image)
-    }
 }

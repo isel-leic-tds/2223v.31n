@@ -65,3 +65,8 @@ private fun BoardRun.isWin(pos: Position) =
         count{ it.col == pos.col } == BOARD_SIZE ||
         count{ it.slash } == BOARD_SIZE || count{ it.backSlash } == BOARD_SIZE
     }
+
+/**
+ * Checks if the board is new (no moves).
+ */
+val Board.isNew get() = moves.isEmpty()
