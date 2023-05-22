@@ -30,11 +30,11 @@ fun PlayerView(label: String, player: Player, modifier: Modifier= Modifier) = Ro
  * The Composable function responsible for the presentation of the status bar.
  */
 @Composable
-fun StatusBar(board: Board) {
+fun StatusBar(info: StatusInfo) {
     val mod = Modifier.width(boardSize).background(Color.Yellow).padding(3.dp)
-    when(board) {
-        is BoardRun -> PlayerView("Turn",board.turn,mod)
-        is BoardWin -> PlayerView("Winner",board.winner,mod)
-        is BoardDraw -> Text("Draw", modifier = mod, textAlign = TextAlign.Center)
-    }
+    val (label,player) = info
+    if (player==null)
+        Text("Draw", modifier = mod, textAlign = TextAlign.Center)
+    else
+        PlayerView(label,player,mod)
 }

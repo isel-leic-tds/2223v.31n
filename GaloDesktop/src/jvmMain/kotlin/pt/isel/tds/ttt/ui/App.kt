@@ -13,24 +13,13 @@ import pt.isel.tds.ttt.model.*
  */
 @Composable
 fun FrameWindowScope.GaloApp(onExit: ()->Unit) {
-    // The state of the application.
-    var board by remember{ mutableStateOf<Board>( createBoard(Player.X) ) }
-    GaloMenu(
-        isNew = board.isNew,
-        onExit,
-        onNew = { board = createBoard(Player.X) }
-    )
+    val vm = remember { GaloViewModel() }       // The ViewModel.
+    GaloMenu(vm, onExit)                        // The App menu.
+    if (vm.helpOpen) HelpDialog(vm::closeHelp)  // The Help dialog.
+
     // Content of the application window.
     Column {
-        BoardView(board){
-            if (board is BoardRun)
-                board = board.play(it)
-            /*try {
-                board = board.play(it)
-            } catch (e: Exception) {
-                println(e.message)
-            }*/
-        }
-        StatusBar(board)
+        BoardView(vm.board, onClick = vm::play)
+        StatusBar(vm.status)
     }
 }

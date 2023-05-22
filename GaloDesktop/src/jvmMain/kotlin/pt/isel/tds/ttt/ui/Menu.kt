@@ -3,20 +3,18 @@ package pt.isel.tds.ttt.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
+import pt.isel.tds.ttt.model.*
 
 /**
  * Menu of the application.
  */
 @Composable
-fun FrameWindowScope.GaloMenu(isNew: Boolean, onExit: ()->Unit, onNew: ()->Unit) = MenuBar {
+fun FrameWindowScope.GaloMenu(vm: GaloViewModel, onExit: ()->Unit, ) = MenuBar {
     Menu("Game") {
-        Item("New", enabled = !isNew, onClick = onNew)
+        Item("New", enabled = !vm.board.isNew, onClick = vm::newGame)
         Item("Exit", onClick = onExit)
     }
     Menu("Help") {
-        Item("About") {
-            println("Help About")
-            //TODO: show about dialog.
-        }
+        Item("About", onClick = vm::openHelp)
     }
 }
