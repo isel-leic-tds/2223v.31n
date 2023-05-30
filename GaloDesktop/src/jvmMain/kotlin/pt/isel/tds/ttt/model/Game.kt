@@ -3,6 +3,7 @@ package pt.isel.tds.ttt.model
 import pt.isel.tds.storage.Storage
 
 typealias BoardStorage = Storage<String, Board>
+//interface BoardStorage: Storage<String, Board>
 
 /**
  * Represents each side of the game.

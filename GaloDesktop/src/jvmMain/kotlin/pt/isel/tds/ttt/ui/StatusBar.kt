@@ -34,7 +34,7 @@ fun StatusBar(info: StatusInfo) {
     val mod = Modifier.width(boardSize).background(Color.Yellow).padding(3.dp)
     val (label,player) = info
     if (player==null)
-        Text("Draw", modifier = mod, textAlign = TextAlign.Center)
+        Text(label, modifier = mod, textAlign = TextAlign.Center)
     else
         PlayerView(label,player,mod)
 }

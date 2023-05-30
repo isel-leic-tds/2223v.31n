@@ -30,24 +30,25 @@ fun BoardViewTest() =
  * @param onClick the function to be called when a cell is clicked.
  */
 @Composable
-fun BoardView(board: Board, onClick: (Position) -> Unit) {
-    Column(
-        modifier = Modifier.size(boardSize).background(Color.Black),
-        verticalArrangement = Arrangement.SpaceBetween,
-    ) {
-        repeat(BOARD_SIZE) { row ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                repeat(BOARD_SIZE) { col->
-                    val pos = Position(row,col)
-                    CellView(board.moves[pos]) { onClick(pos) }
+fun BoardView(board: Board?, onClick: (Position) -> Unit) = if (board==null)
+        Box(modifier = Modifier.size(boardSize).background(Color.LightGray))
+    else
+        Column(
+            modifier = Modifier.size(boardSize).background(Color.Black),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            repeat(BOARD_SIZE) { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    repeat(BOARD_SIZE) { col->
+                        val pos = Position(row,col)
+                        CellView(board.moves[pos]) { onClick(pos) }
+                    }
                 }
             }
         }
-    }
-}
 
 @Composable
 @Preview

@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide empty members
+
+class Position {
+    index: Int
+}
+
+enum Player {
+    X
+    O
+}
+
+class Board
+
+diamond Move
+Move -> Position : key
+Move -> Player: value
+Board *- "*" Move : "moves           "
+
+Board <|-- BoardDraw
+Board <|-- BoardWin
+Board <|-- BoardRun
+
+BoardRun *- Player : turn
+BoardWin *- Player : winner
+
+class Game {
+   id: String
+}
+Game *-- Board : board
+Game *-- Player: player
+Game .left.> BoardStorage : "          "
+interface Storage<K,D> { }
+interface BoardStorage
+Storage <|-right- BoardStorage : "K=String\nD=Board"
+@enduml

@@ -11,10 +11,11 @@ import pt.isel.tds.ttt.model.*
 @Composable
 fun FrameWindowScope.GaloMenu(vm: GaloViewModel, onExit: ()->Unit, ) = MenuBar {
     Menu("Game") {
-        Item("New", enabled = !vm.board.isNew, onClick = vm::newGame)
+        Item("New", onClick = { vm.openDialog(Dialog.NEW) })
+        Item("Join", onClick = { vm.openDialog(Dialog.JOIN) })
         Item("Exit", onClick = onExit)
     }
     Menu("Help") {
-        Item("About", onClick = vm::openHelp)
+        Item("About", onClick = { vm.openDialog(Dialog.HELP) })
     }
 }

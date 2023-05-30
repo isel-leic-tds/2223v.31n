@@ -10,4 +10,9 @@ BoardView *-- "*" CellView
 StatusBar *-- PlayerView
 PlayerView *- CellView
 
+package ViewModel {
+  class GaloViewModel
+}
+
+GaloApp *- GaloViewModel : "                           "
 @enduml
