@@ -25,7 +25,7 @@ fun createGame(id: String, st: BoardStorage) =
 /**
  * Joins an existing game.
  */
-fun joinGame(id: String, st: BoardStorage): Game {
+suspend fun joinGame(id: String, st: BoardStorage): Game {
     val board = checkNotNull( st.read(id) ) { "Game not found" }
     check( board is BoardRun && board.moves.size <= 1 ) { "Game is not available" }
     return Game(board, Player.O, id)
@@ -42,9 +42,10 @@ fun Game.play(pos: Position, st: BoardStorage): Game {
 
 /**
  * Refreshes the game.
+ *
  */
-fun Game.refresh(st: BoardStorage): Game {
+suspend fun Game.refresh(st: BoardStorage, checked: Boolean = true): Game {
     val board = st.read(id) ?: throw Exception("Game not found")
-    check( board != this.board ) { "No changes" }
-    return copy( board = board )
+    if (checked) check( board != this.board ) { "No changes" }
+    return if (board != this.board ) copy( board = board ) else this
 }

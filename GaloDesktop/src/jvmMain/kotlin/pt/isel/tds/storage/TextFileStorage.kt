@@ -1,5 +1,7 @@
 package pt.isel.tds.storage
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.io.path.*
 
 //TextFileStorage<String,Board>("games", BoardSerializer)
@@ -27,11 +29,13 @@ class TextFileStorage<Key,Data>(
             check( !exists() ) { "File already exists" }
             writeText(serializer.serialize(data))
         }
-    override fun read(key: Key): Data? =
+    override suspend fun read(key: Key): Data? = withContext(Dispatchers.IO) {
         path(key).run {
-            if (!exists() ) null
+            Thread.sleep(500) // Simulate a slow operation
+            if (!exists()) null
             else serializer.deserialize(readText())
         }
+    }
     override fun update(key: Key, data: Data) =
         path(key).run {
             check( exists() ) { "File does not exist" }

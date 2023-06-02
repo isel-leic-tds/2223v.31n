@@ -22,7 +22,7 @@ class MongoStorage<Key: Any, Data>(
         val doc = Doc(key, serializer.serialize(data))
         docs.insertDocument(doc)
     }
-    override fun read(key: Key): Data? =
+    override suspend fun read(key: Key): Data? =
         docs.getDocument(key)?.let { serializer.deserialize(it.data) }
 
     override fun update(key: Key, data: Data) {

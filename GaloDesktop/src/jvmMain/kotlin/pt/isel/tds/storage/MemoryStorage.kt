@@ -12,7 +12,7 @@ class MemoryStorage<Key,Data> : Storage<Key,Data> {
         check( !map.containsKey(key) ) { "Key already exists" }
         map[key] = data
     }
-    override fun read(key: Key): Data? = map[key]
+    override suspend fun read(key: Key): Data? = map[key]
     override fun update(key: Key, data: Data) {
         check( map.containsKey(key) ) { "Key does not exist" }
         map[key] = data

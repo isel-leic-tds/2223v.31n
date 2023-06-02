@@ -12,6 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.tds.ttt.model.*
 
+private val CellSize = 30.dp
+private val FontSize = 20.sp
+
 /**
  * The Composable function for of player with one label.
  * @param label the label for the player.
@@ -22,8 +25,8 @@ fun PlayerView(label: String, player: Player, modifier: Modifier= Modifier) = Ro
     modifier = modifier,
     horizontalArrangement = Arrangement.Center
 ){
-    Text("$label: ", fontSize = 20.sp)
-    CellView(player, Modifier.size(20.dp))
+    Text("$label: ", fontSize = FontSize)
+    CellView(player, Modifier.size(CellSize))
 }
 
 /**
@@ -31,10 +34,10 @@ fun PlayerView(label: String, player: Player, modifier: Modifier= Modifier) = Ro
  */
 @Composable
 fun StatusBar(info: StatusInfo) {
-    val mod = Modifier.width(boardSize).background(Color.Yellow).padding(3.dp)
+    val mod = Modifier.width(boardSize).height(CellSize).background(Color.Yellow).padding(3.dp)
     val (label,player) = info
     if (player==null)
-        Text(label, modifier = mod, textAlign = TextAlign.Center)
+        Text(label, modifier = mod, fontSize = FontSize, textAlign = TextAlign.Center)
     else
         PlayerView(label,player,mod)
 }

@@ -18,7 +18,7 @@ interface Storage<Key,Data> {
      * @param key the key of the entry.
      * @return the data stored or null if the key does not exist.
      */
-    fun read(key: Key): Data?
+    suspend fun read(key: Key): Data?
     /**
      * Updates an entry in the storage.
      * @param key the key of the entry.

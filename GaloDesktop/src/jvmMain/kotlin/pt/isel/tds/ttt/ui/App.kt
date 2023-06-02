@@ -14,7 +14,8 @@ import pt.isel.tds.ttt.model.*
  */
 @Composable
 fun FrameWindowScope.GaloApp(onExit: ()->Unit) {
-    val vm = remember { GaloViewModel() }       // The ViewModel.
+    val scope = rememberCoroutineScope()
+    val vm = remember { GaloViewModel(scope) }       // The ViewModel.
     GaloMenu(vm, onExit)                        // The App menu.
     GaloDialog(vm)                              // The Dialogs.
     // Content of the application window.
@@ -22,26 +23,4 @@ fun FrameWindowScope.GaloApp(onExit: ()->Unit) {
         BoardView(vm.game?.board, onClick = vm::play)
         StatusBar(vm.status)
     }
-}
-
-@Composable
-fun GaloDialog(vm: GaloViewModel) =
-    when (val dialog = vm.open) {
-        Dialog.NEW -> NameDialog(vm::closeDialog, vm::newGame, "New Game")
-        Dialog.JOIN -> NameDialog(vm::closeDialog, vm::joinGame, "Join Game")
-        Dialog.HELP -> HelpDialog(vm::closeDialog)
-        null -> Unit
-    }
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun NameDialog(onClose: ()->Unit, onOk: (String)->Unit, title: String) {
-    var name by remember { mutableStateOf("") }
-    AlertDialog(
-        onDismissRequest = onClose,
-        title = { Text(title) },
-        text = { TextField(name, onValueChange = { name = it }) },
-        dismissButton = { Button(onClick = onClose){ Text("Cancel") } },
-        confirmButton = { Button(onClick = { onOk(name) }){ Text("Ok") } }
-    )
 }
