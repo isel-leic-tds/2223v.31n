@@ -66,21 +66,32 @@ class GaloViewModel(val scope: CoroutineScope) {
     // Toggle the auto refresh state and start the loop if needed
     fun toggleAutoRefresh() {
         autoRefresh = !autoRefresh
-        loopAutoRefresh()
+        if (autoRefresh) loopAutoRefresh()
+        else refresh?.let {
+            // Cancel the loop
+            it.cancel()
+            println("+")
+            refresh = null
+        }
     }
+
+    // Coroutine job of the loop that refreshes the game
+    private var refresh: Job? by mutableStateOf(null)
 
     // Starts the auto refresh loop that refreshes the game every 2 seconds.
     // The loop is stopped when the game was modified.
     private fun loopAutoRefresh() {
         if (autoRefresh && mayRefresh()) {
-            scope.launch {
+            refresh = scope.launch {
                 while (true) {
                     print("R")
                     game = game?.refresh(storage, checked = false)
                     if (!mayRefresh()) break
                     delay(2000)
                 }
+                // Normal termination
                 println(".")
+                refresh = null
             }
         }
     }
@@ -108,10 +119,10 @@ class GaloViewModel(val scope: CoroutineScope) {
     //region Status information
     val status: StatusInfo
         get() = when(val b= game?.board) {
-            is BoardRun -> "Turn" of b.turn
-            is BoardWin -> "Winner" of b.winner
-            is BoardDraw -> "Draw" of null
-            null -> "No Game" of null
+            is BoardRun -> StatusInfo("Turn",b.turn,refresh!=null)
+            is BoardWin -> StatusInfo("Winner",b.winner)
+            is BoardDraw -> StatusInfo("Draw")
+            null -> StatusInfo("No Game")
         }
     //endregion
 
@@ -135,7 +146,6 @@ class GaloViewModel(val scope: CoroutineScope) {
 enum class Dialog  { NEW, JOIN, HELP, MESSAGE }
 
 // Status of the game to be displayed in status bar
-data class StatusInfo(val label: String, val player: Player?)
+data class StatusInfo(val label: String, val player: Player?=null, val refreshing: Boolean = false)
 
-infix fun String.of(p: Player?) = StatusInfo(this,p)
 
