@@ -1,5 +1,8 @@
 package pt.isel.tds.storage
 
+import com.mongodb.MongoWriteException
+import kotlin.io.path.exists
+
 // MongoStorage<String,Board>("games", driver, BoardSerializer)
 
 /**
@@ -20,7 +23,11 @@ class MongoStorage<Key: Any, Data>(
     // CRUD operations
     override fun create(key: Key, data: Data) {
         val doc = Doc(key, serializer.serialize(data))
-        docs.insertDocument(doc)
+        try {
+            docs.insertDocument(doc)
+        } catch (e: MongoWriteException) {
+            error("File already exists")
+        }
     }
     override suspend fun read(key: Key): Data? =
         docs.getDocument(key)?.let { serializer.deserialize(it.data) }

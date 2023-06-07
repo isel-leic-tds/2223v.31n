@@ -12,11 +12,11 @@ import kotlin.concurrent.thread
  * View model of the application.
  * Manages the state of the game and open dialogs.
  */
-class GaloViewModel(val scope: CoroutineScope) {
+class GaloViewModel(
+    private val scope: CoroutineScope,      // Scope of composed coroutines
+    private val storage: BoardStorage       // Storage to use in game operations
+) {
     //region Game State
-    // Storage to use in game operations
-    private val storage: BoardStorage = TextFileStorage("games",BoardSerializer)
-
     // Game being played
     var game by mutableStateOf<Game?>(null)
         private set
